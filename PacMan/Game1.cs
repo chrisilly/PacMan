@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -13,6 +14,8 @@ namespace PacMan
 
         Tile[,] levelTiles;
         List<string> levelRowList;
+
+        Player player;
 
         Texture2D tileTexture;
         Texture2D spriteSheet;
@@ -33,8 +36,8 @@ namespace PacMan
             graphics.PreferredBackBufferHeight = 1080;
             graphics.ApplyChanges();
 
-            frameTimer = 100;
             frameInterval = 100;
+            frameTimer = frameInterval;
 
             ReadLevel();
 
@@ -56,7 +59,7 @@ namespace PacMan
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            UpdateFrameTimer(gameTime);
 
             base.Update(gameTime);
         }
@@ -68,10 +71,21 @@ namespace PacMan
             spriteBatch.Begin();
 
             DrawTiles();
+            player.Draw(spriteBatch);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void UpdateFrameTimer(GameTime gameTime)
+        {
+            frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (frameTimer <= 0)
+            {
+                frameTimer = frameInterval; frame++;
+                player.SetSourceRectangleX((frame % 3) * Tile.tileSize);
+            }
         }
 
         private void ReadLevel()
@@ -121,7 +135,7 @@ namespace PacMan
                     }
                     else if (levelRowList[i][j] == 'P')
                     {
-                        // add pac-man
+                        player = new Player(spriteSheet, tilePosition, new Rectangle(0, 0, Tile.tileSize, Tile.tileSize));
                     }
                     else if (levelRowList[i][j] == '1')
                     {
