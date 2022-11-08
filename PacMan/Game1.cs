@@ -16,6 +16,7 @@ namespace PacMan
         List<string> levelRowList;
 
         Player player;
+        List<Ghost> ghostList = new List<Ghost>();
 
         Texture2D tileTexture;
         Texture2D spriteSheet;
@@ -72,6 +73,8 @@ namespace PacMan
 
             DrawTiles();
             player.Draw(spriteBatch);
+            foreach (Ghost ghost in ghostList)
+                ghost.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -84,7 +87,9 @@ namespace PacMan
             if (frameTimer <= 0)
             {
                 frameTimer = frameInterval; frame++;
-                player.SetSourceRectangleX((frame % 3) * Tile.tileSize);
+                player.AdvanceFrame(frame, 3);
+                foreach (Ghost ghost in ghostList)
+                    ghost.AdvanceFrame(frame, 2);
             }
         }
 
@@ -135,24 +140,25 @@ namespace PacMan
                     }
                     else if (levelRowList[i][j] == 'P')
                     {
-                        player = new Player(spriteSheet, tilePosition, new Rectangle(0, 0, Tile.tileSize, Tile.tileSize));
+                        player = new Player(spriteSheet, tilePosition);
                     }
-                    else if (levelRowList[i][j] == '1')
+                    else if (levelRowList[i][j] == 'G')
                     {
-                        // add ghost object 1
+                        Ghost ghost = new Ghost(spriteSheet, tilePosition);
+                        ghostList.Add(ghost);
                     }
-                    else if (levelRowList[i][j] == '2')
-                    {
-                        // add ghost object 2
-                    }
-                    else if (levelRowList[i][j] == '3')
-                    {
-                        // add ghost object 3
-                    }
-                    else if (levelRowList[i][j] == '4')
-                    {
-                        // add ghost object 4
-                    }
+                    //else if (levelRowList[i][j] == '2')
+                    //{
+                    //    // add ghost object 2
+                    //}
+                    //else if (levelRowList[i][j] == '3')
+                    //{
+                    //    // add ghost object 3
+                    //}
+                    //else if (levelRowList[i][j] == '4')
+                    //{
+                    //    // add ghost object 4
+                    //}
                 }
             }
         }

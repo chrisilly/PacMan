@@ -12,14 +12,12 @@ namespace PacMan
     {
         Texture2D texture;
         Vector2 position;
-        Vector2 velocity;
-        Rectangle sourceRectangle;
+        protected Rectangle sourceRectangle;
 
-        public Actor(Texture2D texture, Vector2 position, Rectangle sourceRectangle)
+        public Actor(Texture2D texture, Vector2 position)
         {
             this.texture = texture;
             this.position = position;
-            this.sourceRectangle = sourceRectangle;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -27,9 +25,9 @@ namespace PacMan
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White);
         }
 
-        public void SetSourceRectangleX(int frame)
+        public void AdvanceFrame(int currentFrame, int maxFrames)
         {
-            sourceRectangle.X = frame;
+            sourceRectangle.X = (currentFrame % maxFrames) * Tile.tileSize;
         }
     }
 }
