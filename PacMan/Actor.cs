@@ -45,6 +45,11 @@ namespace PacMan
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, origin, scale, spriteEffect, 0);
         }
 
+        public void DrawHitbox(SpriteBatch spriteBatch, Texture2D texture)
+        {
+            spriteBatch.Draw(texture, hitbox, Color.FromNonPremultiplied(155, 255, 61, 122));
+        }
+
         public void AdvanceFrame(int currentFrame, int maxFrames)
         {
             sourceRectangle.X = (currentFrame % maxFrames) * Tile.tileSize;
@@ -82,6 +87,7 @@ namespace PacMan
 
         public void ResetPosition()
         {
+            hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, Tile.tileSize, Tile.tileSize);
             moving = false;
             position = startPosition;
         }

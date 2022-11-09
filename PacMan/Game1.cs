@@ -12,6 +12,8 @@ namespace PacMan
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+        static GameState gameState { get; set; } = GameState.Play;
+
         static Tile[,] levelTiles;
         List<string> levelRowList;
 
@@ -65,10 +67,29 @@ namespace PacMan
                 Exit();
 
             UpdateFrameTimer(gameTime);
-            player.CheckInput(gameTime);
-            foreach (Ghost ghost in ghostList)
-                ghost.UpdateGhost(gameTime);
-            CheckForCollision();
+
+            switch (gameState)
+            {
+                case GameState.Play:
+
+                    //Update Actors
+                    player.CheckInput(gameTime);
+                    foreach (Ghost ghost in ghostList)
+                        ghost.UpdateGhost(gameTime);
+
+                    CheckForCollision();
+
+                    if (lives <= 0)
+                        gameState = GameState.Lose;
+
+                    break;
+                case GameState.Win:
+                    break;
+                case GameState.Lose:
+                    break;
+                default:
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -81,8 +102,12 @@ namespace PacMan
 
             DrawTiles();
             player.Draw(spriteBatch);
+            player.DrawHitbox(spriteBatch, tileTexture);
             foreach (Ghost ghost in ghostList)
+            {
                 ghost.Draw(spriteBatch);
+                ghost.DrawHitbox(spriteBatch, tileTexture);
+            }
 
             spriteBatch.End();
 
@@ -97,18 +122,18 @@ namespace PacMan
                 frameTimer = frameInterval; frame++;
                 player.AdvanceFrame(frame, 3);
                 foreach (Ghost ghost in ghostList)
-                    ghost.AdvanceFrame(frame, 2);
+                    ghost.AdvanceFrame(frame, 8);
             }
         }
 
         public void CheckForCollision()
         {
-            foreach (Ghost ghost in ghostList)
+            for (int i = 0; i < ghostList.Count; i++)
             {
-                if (player.GetHitbox().Intersects(ghost.GetHitbox()))
+                if (player.GetHitbox().Intersects(ghostList[i].GetHitbox()))
                 {
-                    lives--;
                     player.ResetPosition();
+                    lives--;
                 }
             }
         }
