@@ -21,6 +21,7 @@ namespace PacMan
             {
                 Vector2 randomDirection = GetRandomDirection();
 
+                // Check if there are available paths in all directions, but don't go back to where you came from
                 if (randomDirection != direction*-1)
                 {
                     SetDestinationIfValidDirection(randomDirection);

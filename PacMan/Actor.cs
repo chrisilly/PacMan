@@ -55,6 +55,7 @@ namespace PacMan
             sourceRectangle.X = (currentFrame % maxFrames) * Tile.tileSize;
         }
 
+        // Move in specified direction if possible
         public void SetDestinationIfValidDirection(Vector2 direction)
         {
             Vector2 newDestination = position + direction * Tile.tileSize;
@@ -70,7 +71,7 @@ namespace PacMan
         public void Move(GameTime gameTime)
         {
             position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            hitbox = new Rectangle((int)position.X, (int)position.Y, Tile.tileSize, Tile.tileSize);
+            hitbox = new Rectangle((int)position.X-Tile.tileSize/2, (int)position.Y-Tile.tileSize/2, Tile.tileSize, Tile.tileSize);
 
             if (Vector2.Distance(position, destination) < 1)
             {

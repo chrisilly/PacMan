@@ -19,6 +19,7 @@ namespace PacMan
 
         Player player;
         List<Ghost> ghostList = new List<Ghost>();
+        List<Pellet> pelletList = new List<Pellet>();
 
         Texture2D tileTexture;
         Texture2D spriteSheet;
@@ -79,8 +80,7 @@ namespace PacMan
 
                     CheckForCollision();
 
-                    if (lives <= 0)
-                        gameState = GameState.Lose;
+                    CheckGameState();
 
                     break;
                 case GameState.Win:
@@ -108,10 +108,22 @@ namespace PacMan
                 ghost.Draw(spriteBatch);
                 ghost.DrawHitbox(spriteBatch, tileTexture);
             }
+            foreach (Pellet pellet in pelletList)
+            {
+                pellet.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void CheckGameState()
+        {
+            if (pelletList.Count <= 0)
+                gameState = GameState.Win;
+            if (lives <= 0)
+                gameState = GameState.Lose;
         }
 
         public void UpdateFrameTimer(GameTime gameTime)
@@ -134,6 +146,15 @@ namespace PacMan
                 {
                     player.ResetPosition();
                     lives--;
+                }
+            }
+
+            for (int i = 0; i < pelletList.Count; i++)
+            {
+                if (player.GetHitbox().Intersects(pelletList[i].GetHitbox()))
+                {
+                    pelletList.RemoveAt(i);
+                    break;
                 }
             }
         }
@@ -179,7 +200,8 @@ namespace PacMan
 
                     if (levelRowList[i][j] == '-')
                     {
-                        // add new food objects
+                        Pellet pellet = new Pellet(spriteSheet, tilePosition);
+                        pelletList.Add(pellet);
                     }
                     else if (levelRowList[i][j] == '+')
                     {
