@@ -12,7 +12,7 @@ namespace PacMan
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
-        Tile[,] levelTiles;
+        static Tile[,] levelTiles;
         List<string> levelRowList;
 
         Player player;
@@ -61,6 +61,7 @@ namespace PacMan
                 Exit();
 
             UpdateFrameTimer(gameTime);
+            player.CheckInput(gameTime);
 
             base.Update(gameTime);
         }
@@ -93,6 +94,12 @@ namespace PacMan
             }
         }
 
+        // Check if destination is a non-solid tile
+        public static bool IsTileValidDestination(Vector2 destination)
+        {
+            return !levelTiles[(int)destination.X / Tile.tileSize, (int)destination.Y / Tile.tileSize].IsSolid();
+        }
+
         private void ReadLevel()
         {
             StreamReader levelFile = new StreamReader(@"..\..\..\Content\level.txt");
@@ -121,10 +128,6 @@ namespace PacMan
                         tileColor = Color.Blue;
                         levelTiles[j, i] = new Tile(tileTexture, tilePosition, tileColor, true);
                     }
-                    else if (levelRowList[i][j] == '0')
-                    {
-                        levelTiles[j, i] = new Tile(tileTexture, tilePosition, tileColor, true);
-                    }
                     else
                     {
                         levelTiles[j, i] = new Tile(tileTexture, tilePosition, tileColor);
@@ -147,18 +150,6 @@ namespace PacMan
                         Ghost ghost = new Ghost(spriteSheet, tilePosition);
                         ghostList.Add(ghost);
                     }
-                    //else if (levelRowList[i][j] == '2')
-                    //{
-                    //    // add ghost object 2
-                    //}
-                    //else if (levelRowList[i][j] == '3')
-                    //{
-                    //    // add ghost object 3
-                    //}
-                    //else if (levelRowList[i][j] == '4')
-                    //{
-                    //    // add ghost object 4
-                    //}
                 }
             }
         }

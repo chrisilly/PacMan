@@ -38,5 +38,10 @@ namespace PacMan
         {
             spriteBatch.Draw(texture, position, color);
         }
+
+        public bool IsSolid()
+        {
+            return solid;
+        }
     }
 }
