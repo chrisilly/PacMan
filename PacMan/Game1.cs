@@ -24,6 +24,8 @@ namespace PacMan
         int frame;
         double frameTimer, frameInterval;
 
+        int lives;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,6 +41,8 @@ namespace PacMan
 
             frameInterval = 100;
             frameTimer = frameInterval;
+
+            lives = 3;
 
             ReadLevel();
 
@@ -64,6 +68,7 @@ namespace PacMan
             player.CheckInput(gameTime);
             foreach (Ghost ghost in ghostList)
                 ghost.UpdateGhost(gameTime);
+            CheckForCollision();
 
             base.Update(gameTime);
         }
@@ -93,6 +98,18 @@ namespace PacMan
                 player.AdvanceFrame(frame, 3);
                 foreach (Ghost ghost in ghostList)
                     ghost.AdvanceFrame(frame, 2);
+            }
+        }
+
+        public void CheckForCollision()
+        {
+            foreach (Ghost ghost in ghostList)
+            {
+                if (player.GetHitbox().Intersects(ghost.GetHitbox()))
+                {
+                    lives--;
+                    player.ResetPosition();
+                }
             }
         }
 

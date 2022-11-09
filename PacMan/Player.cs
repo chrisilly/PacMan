@@ -13,8 +13,6 @@ namespace PacMan
 {
     internal class Player : Actor
     {
-        int health;
-
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
             sourceRectangle = new Rectangle(0, 0, Tile.tileSize, Tile.tileSize);

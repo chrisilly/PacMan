@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace PacMan
 {
+    public enum GameState { Play, Win, Lose }
+
     internal class Actor
     {
         protected Random random = new Random();
 
         Texture2D texture;
+        Rectangle hitbox;
+        Vector2 startPosition;
         protected Vector2 position;
         protected Rectangle sourceRectangle;
 
@@ -32,6 +36,8 @@ namespace PacMan
         {
             this.texture = texture;
             this.position = position + origin;
+            this.hitbox = new Rectangle((int)position.X, (int)position.Y, Tile.tileSize, Tile.tileSize);
+            this.startPosition = this.position;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -59,6 +65,7 @@ namespace PacMan
         public void Move(GameTime gameTime)
         {
             position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            hitbox = new Rectangle((int)position.X, (int)position.Y, Tile.tileSize, Tile.tileSize);
 
             if (Vector2.Distance(position, destination) < 1)
             {
@@ -71,6 +78,17 @@ namespace PacMan
         {
             rotation = 0;
             spriteEffect = SpriteEffects.None;
+        }
+
+        public void ResetPosition()
+        {
+            moving = false;
+            position = startPosition;
+        }
+
+        public Rectangle GetHitbox()
+        {
+            return hitbox;
         }
     }
 }
