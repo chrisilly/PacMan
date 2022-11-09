@@ -1,6 +1,6 @@
 SSSSSSSSSSSSSSSSSSSSSSS
 S----------S----------S
-S+SSS-SSSS-S-SSSS-SSS+S
+S-SSS-SSSS-S-SSSS-SSS-S
 S---------------------S
 S-SSS-S-SSSSSSS-S-SSS-S
 S-----S----S----S-----S
@@ -12,5 +12,5 @@ SSSSS-SSSS0S0SSSS-SSSSS
 SSSSS-S0SSSSSSS0S-SSSSS
 S----------S----------S
 S-SSS-SSSS-S-SSSS-SSS-S
-S+---------P---------+S
+S----------P----------S
 SSSSSSSSSSSSSSSSSSSSSSS

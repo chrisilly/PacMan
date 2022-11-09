@@ -102,11 +102,11 @@ namespace PacMan
 
             DrawTiles();
             player.Draw(spriteBatch);
-            player.DrawHitbox(spriteBatch, tileTexture);
+            //player.DrawHitbox(spriteBatch, tileTexture);
             foreach (Ghost ghost in ghostList)
             {
                 ghost.Draw(spriteBatch);
-                ghost.DrawHitbox(spriteBatch, tileTexture);
+                //ghost.DrawHitbox(spriteBatch, tileTexture);
             }
             foreach (Pellet pellet in pelletList)
             {
@@ -202,10 +202,6 @@ namespace PacMan
                     {
                         Pellet pellet = new Pellet(spriteSheet, tilePosition);
                         pelletList.Add(pellet);
-                    }
-                    else if (levelRowList[i][j] == '+')
-                    {
-                        // add power-up food
                     }
                     else if (levelRowList[i][j] == 'P')
                     {
