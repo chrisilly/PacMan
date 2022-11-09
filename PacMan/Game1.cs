@@ -62,6 +62,8 @@ namespace PacMan
 
             UpdateFrameTimer(gameTime);
             player.CheckInput(gameTime);
+            foreach (Ghost ghost in ghostList)
+                ghost.UpdateGhost(gameTime);
 
             base.Update(gameTime);
         }

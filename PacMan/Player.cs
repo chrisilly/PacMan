@@ -26,24 +26,24 @@ namespace PacMan
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    CheckDirection(new Vector2(-1, 0));
+                    SetDestinationIfValidDirection(new Vector2(-1, 0));
                     ResetSpriteEffects();
                     spriteEffect = SpriteEffects.FlipHorizontally;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    CheckDirection(new Vector2(1, 0));
+                    SetDestinationIfValidDirection(new Vector2(1, 0));
                     ResetSpriteEffects();
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    CheckDirection(new Vector2(0, -1));
+                    SetDestinationIfValidDirection(new Vector2(0, -1));
                     ResetSpriteEffects();
                     rotation = MathHelper.ToRadians(-90);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    CheckDirection(new Vector2(0, 1));
+                    SetDestinationIfValidDirection(new Vector2(0, 1));
                     ResetSpriteEffects();
                     rotation = MathHelper.ToRadians(90);
                 }

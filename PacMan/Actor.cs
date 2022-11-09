@@ -10,6 +10,8 @@ namespace PacMan
 {
     internal class Actor
     {
+        protected Random random = new Random();
+
         Texture2D texture;
         protected Vector2 position;
         protected Rectangle sourceRectangle;
@@ -20,7 +22,7 @@ namespace PacMan
 
         protected Vector2 destination;
         protected Vector2 direction;
-        protected float speed = 100;
+        protected float speed = 50;
 
         protected bool moving = false;
 
@@ -42,13 +44,13 @@ namespace PacMan
             sourceRectangle.X = (currentFrame % maxFrames) * Tile.tileSize;
         }
 
-        public void CheckDirection(Vector2 direction)
+        public void SetDestinationIfValidDirection(Vector2 direction)
         {
-            this.direction = direction;
             Vector2 newDestination = position + direction * Tile.tileSize;
 
             if (Game1.IsTileValidDestination(newDestination))
             {
+                this.direction = direction;
                 destination = newDestination;
                 moving = true;
             }
