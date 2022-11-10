@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 
 namespace PacMan
 {
-    public enum GameState { Play, Win, Lose }
-
     internal class Actor
     {
         protected Random random = new Random();
@@ -91,6 +89,25 @@ namespace PacMan
             hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, Tile.tileSize, Tile.tileSize);
             moving = false;
             position = startPosition;
+        }
+
+        public Vector2 GetRandomDirection()
+        {
+            int number = random.Next(0, 4);
+            Vector2 randomDirection;
+
+            if (number == 0)
+                randomDirection = new Vector2(-1, 0);
+            else if (number == 1)
+                randomDirection = new Vector2(1, 0);
+            else if (number == 2)
+                randomDirection = new Vector2(0, -1);
+            else if (number == 3)
+                randomDirection = new Vector2(0, 1);
+            else
+                randomDirection = Vector2.Zero;
+
+            return randomDirection;
         }
 
         public Rectangle GetHitbox()

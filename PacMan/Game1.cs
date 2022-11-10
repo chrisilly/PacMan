@@ -7,6 +7,8 @@ using System.IO;
 
 namespace PacMan
 {
+    public enum GameState { Play, Win, Lose }
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
@@ -17,17 +19,13 @@ namespace PacMan
         static Tile[,] levelTiles;
         List<string> levelRowList;
 
-        Player player;
-        List<Ghost> ghostList = new List<Ghost>();
-        List<Pellet> pelletList = new List<Pellet>();
-
         Texture2D tileTexture;
         Texture2D spriteSheet;
 
         int frame;
         double frameTimer, frameInterval;
 
-        int lives;
+        ActorManager actorManager = new ActorManager();
 
         public Game1()
         {
@@ -44,8 +42,6 @@ namespace PacMan
 
             frameInterval = 100;
             frameTimer = frameInterval;
-
-            lives = 3;
 
             ReadLevel();
 
@@ -72,16 +68,8 @@ namespace PacMan
             switch (gameState)
             {
                 case GameState.Play:
-
-                    //Update Actors
-                    player.CheckInput(gameTime);
-                    foreach (Ghost ghost in ghostList)
-                        ghost.UpdateGhost(gameTime);
-
-                    CheckForCollision();
-
+                    actorManager.Update(gameTime);
                     CheckGameState();
-
                     break;
                 case GameState.Win:
                     break;
@@ -101,62 +89,32 @@ namespace PacMan
             spriteBatch.Begin();
 
             DrawTiles();
-            player.Draw(spriteBatch);
-            //player.DrawHitbox(spriteBatch, tileTexture);
-            foreach (Ghost ghost in ghostList)
-            {
-                ghost.Draw(spriteBatch);
-                //ghost.DrawHitbox(spriteBatch, tileTexture);
-            }
-            foreach (Pellet pellet in pelletList)
-            {
-                pellet.Draw(spriteBatch);
-            }
+            actorManager.Draw(spriteBatch);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void CheckGameState()
-        {
-            if (pelletList.Count <= 0)
-                gameState = GameState.Win;
-            if (lives <= 0)
-                gameState = GameState.Lose;
-        }
-
+        // Animate sprites
         public void UpdateFrameTimer(GameTime gameTime)
         {
             frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (frameTimer <= 0)
             {
                 frameTimer = frameInterval; frame++;
-                player.AdvanceFrame(frame, 3);
-                foreach (Ghost ghost in ghostList)
+                actorManager.player.AdvanceFrame(frame, 3);
+                foreach (Ghost ghost in actorManager.ghostList)
                     ghost.AdvanceFrame(frame, 8);
             }
         }
 
-        public void CheckForCollision()
+        public void CheckGameState()
         {
-            for (int i = 0; i < ghostList.Count; i++)
-            {
-                if (player.GetHitbox().Intersects(ghostList[i].GetHitbox()))
-                {
-                    player.ResetPosition();
-                    lives--;
-                }
-            }
-
-            for (int i = 0; i < pelletList.Count; i++)
-            {
-                if (player.GetHitbox().Intersects(pelletList[i].GetHitbox()))
-                {
-                    pelletList.RemoveAt(i);
-                    break;
-                }
-            }
+            if (actorManager.pelletList.Count <= 0)
+                gameState = GameState.Win;
+            if (actorManager.playerLives <= 0)
+                gameState = GameState.Lose;
         }
 
         // Check if destination is a non-solid tile
@@ -201,16 +159,16 @@ namespace PacMan
                     if (levelRowList[i][j] == '-')
                     {
                         Pellet pellet = new Pellet(spriteSheet, tilePosition);
-                        pelletList.Add(pellet);
+                        actorManager.pelletList.Add(pellet);
                     }
                     else if (levelRowList[i][j] == 'P')
                     {
-                        player = new Player(spriteSheet, tilePosition);
+                        actorManager.player = new Player(spriteSheet, tilePosition);
                     }
                     else if (levelRowList[i][j] == 'G')
                     {
                         Ghost ghost = new Ghost(spriteSheet, tilePosition);
-                        ghostList.Add(ghost);
+                        actorManager.ghostList.Add(ghost);
                     }
                 }
             }

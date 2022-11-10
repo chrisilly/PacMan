@@ -32,24 +32,5 @@ namespace PacMan
                 Move(gameTime);
             }
         }
-
-        public Vector2 GetRandomDirection()
-        {
-            int number = random.Next(0, 4);
-            Vector2 randomDirection;
-            
-            if (number == 0)
-                randomDirection = new Vector2(-1, 0);
-            else if (number == 1)
-                randomDirection = new Vector2(1, 0);
-            else if (number == 2)
-                randomDirection = new Vector2(0, -1);
-            else if (number == 3)
-                randomDirection = new Vector2(0, 1);
-            else
-                randomDirection = Vector2.Zero;
-
-            return randomDirection;
-        }
     }
 }
